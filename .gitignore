@@ -1,0 +1,36 @@
+.gitignore.py[cod]
+# C
+*.c
+
+# Distribution / packaging
+dist
+build
+eggs
+*.egg-info
+*.egg
+*.egg-requires
+
+# Virtualenv
+.venv
+venv
+ENV
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# Env
+.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.pyc
+
+# egg
+*.egg-info/
