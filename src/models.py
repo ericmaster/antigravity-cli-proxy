@@ -76,5 +76,62 @@ class ChatCompletionResponse(BaseModel):
 class HealthResponse(BaseModel):
     """Response schema for GET /healthz."""
 
-    status: Literal["ok"] = "ok"
+    status: str = "ok"
     version: str = "0.1.0"
+
+
+# ---------------------------------------------------------------------------
+# Embeddings models
+# ---------------------------------------------------------------------------
+
+class EmbeddingRequest(BaseModel):
+    """OpenAI-compatible /embeddings request body."""
+
+    input: str | list[str]
+    model: str = Field(default="text-embedding-004", description="Embedding model identifier")
+    encoding_format: str = Field(default="float", description="float or base64")
+    dimensions: int | None = None
+
+
+class EmbeddingObject(BaseModel):
+    """A single embedding in the response."""
+
+    object: Literal["embedding"] = "embedding"
+    index: int = 0
+    embedding: list[float]
+
+
+class EmbeddingUsage(BaseModel):
+    """Token usage for embeddings (CLI does not report tokens)."""
+
+    prompt_tokens: int = 0
+    total_tokens: int = 0
+
+
+class EmbeddingResponse(BaseModel):
+    """OpenAI-compatible /embeddings response."""
+
+    object: Literal["list"] = "list"
+    data: list[EmbeddingObject]
+    model: str
+    usage: EmbeddingUsage = Field(default_factory=EmbeddingUsage)
+
+
+# ---------------------------------------------------------------------------
+# Models list endpoint models
+# ---------------------------------------------------------------------------
+
+class ModelObject(BaseModel):
+    """A single model entry in the /v1/models list."""
+
+    id: str
+    object: Literal["model"] = "model"
+    created: int = Field(default_factory=lambda: int(time.time()))
+    owned_by: str = "antigravity"
+
+
+class ModelsListResponse(BaseModel):
+    """OpenAI-compatible /v1/models response."""
+
+    object: Literal["list"] = "list"
+    data: list[ModelObject]
